@@ -1,7 +1,9 @@
 import axios from "axios";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
+console.log(baseURL);
 const api = axios.create({
-  baseURL: "https://zoai-steam.onrender.com/api",
+  baseURL: baseURL,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
