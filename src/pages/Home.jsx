@@ -45,7 +45,7 @@ export default function Home() {
       <div className="mt-6 w-full max-w-md">
         <div className="bg-zinc-800 rounderd-lg p-6 border border-zinc-700 shadow-lg min-h-[100px] flex items-center justify-center">
           {loading ? (
-            <p>Carregando resposta...</p>
+            <p>A resposta aparecerá aqui</p>
           ) : response ? (
             <p>{response.joke}</p>
           ) : (
