@@ -2,12 +2,12 @@ import api from "./api";
 
 const authServices = {
   async refresh() {
-    const response = api.post(
+    const response = await api.post(
       "/auth/refresh",
       {},
       {
         withCredentials: true,
-      }
+      },
     );
     const { accessToken } = response.data;
     return accessToken;

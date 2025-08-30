@@ -1,7 +1,6 @@
 import axios from "axios";
+import authServices from "./auth";
 const baseURL = import.meta.env.VITE_BASE_URL;
-
-console.log(baseURL);
 const api = axios.create({
   baseURL: baseURL,
   headers: { "Content-Type": "application/json" },
@@ -45,12 +44,12 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 const setToken = (token) => {
   localStorage.setItem("accessToken", token);
-  api.defaults.headers.commom.Authorization = `Bearer ${token}`;
+  api.defaults.headers.authorization = `Bearer ${token}`;
 };
 
 const getToken = () => {
@@ -58,4 +57,4 @@ const getToken = () => {
 };
 
 export default api;
-export { setToken };
+export { setToken, getToken };
