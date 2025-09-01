@@ -1,11 +1,11 @@
-import authServices from "../api/auth";
-import { useAuth } from "../auth/useAuth"
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 export function Header() {
-  const { token, setToken } = useAuth()
+  const { logout, accessToken } = useContext(AuthContext)
   const handleLogout = async (e) => {
     e.preventDefault()
-    await authServices.logout()
-    setToken(null)
+    await logout()
+    window.location.href = "/"
   }
   return (
     <div>
@@ -17,7 +17,7 @@ export function Header() {
           </a>
         </div>
         <div className="flex justify-around gap-10 items-center">
-          {token ? (
+          {accessToken ? (
             <>
               <div>
                 <a href="/history" className="px-3 py-2 rounded-lg hover:underline">

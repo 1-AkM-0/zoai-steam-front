@@ -1,10 +1,11 @@
-import api from "./api";
+/* import api, { getRefreshToken } from "./api";
 
 const authServices = {
   async refresh() {
+    const refreshToken = getRefreshToken();
     const response = await api.post(
       "/auth/refresh",
-      {},
+      { refreshToken: refreshToken },
       {
         withCredentials: true,
       },
@@ -14,14 +15,19 @@ const authServices = {
   },
 
   async logout() {
+    const refreshToken = getRefreshToken();
     try {
-      await api.post("/auth/logout", {}, { withCredentials: true });
+      await api.post(
+        "/auth/logout",
+        { refreshToken },
+        { withCredentials: true },
+      );
     } catch (error) {
       console.warn("Error on logout", error);
     }
     localStorage.removeItem("accessToken");
-    window.location.href = "/";
+    localStorage.removeItem("refreshToken");
   },
 };
 
-export default authServices;
+export default authServices; */
