@@ -15,13 +15,12 @@ const authServices = {
 
   async logout() {
     try {
-      await api.post("/auth/logout");
+      await api.post("/auth/logout", {}, { withCredentials: true });
     } catch (error) {
       console.warn("Error on logout", error);
     }
     localStorage.removeItem("accessToken");
-
-    window.location.href = "/login";
+    window.location.href = "/";
   },
 };
 

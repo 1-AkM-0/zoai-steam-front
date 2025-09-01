@@ -1,4 +1,12 @@
+import authServices from "../api/auth";
+import { useAuth } from "../auth/useAuth"
 export function Header() {
+  const { token, setToken } = useAuth()
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    await authServices.logout()
+    setToken(null)
+  }
   return (
     <div>
 
@@ -8,28 +16,58 @@ export function Header() {
             ZoAI Steam 🎮
           </a>
         </div>
-        <div className="flex justify-around gap-10">
+        <div className="flex justify-around gap-10 items-center">
+          {token ? (
+            <>
+              <div>
+                <a href="/history" className="px-3 py-2 rounded-lg hover:underline">
+                  History
+                </a>
+              </div>
 
-          <div>
-            <a href="/login" className="px-3 py-2 rounded-lg hover:underline">
-              Login
-            </a>
-          </div>
-          <div>
-            <a href="/sign-up" className="px-3 py-2 rounded-lg hover:underline">
-              SignUp
-            </a>
-          </div>
-          <div>
-            <a
-              href="https://github.com/1-AkM-0/zoai-steam"
-              className="px-3 py-2 rounded-lg text-indigo-400 hover:underline hover:text-indigo-600"
-              rel='noopener noreferrer'
-            >
+              <div>
+                <button onClick={handleLogout} className="px-3 py-2 rounded-lg hover:underline">
+                  Logout
+                </button>
+              </div>
+              <div>
+                <a
+                  href="https://github.com/1-AkM-0/zoai-steam"
+                  className="px-3 py-2 rounded-lg text-indigo-400 hover:underline hover:text-indigo-600"
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
 
-              Github
-            </a>
-          </div>
+                  Github
+                </a>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <a href="/login" className="px-3 py-2 rounded-lg hover:underline">
+                  Login
+                </a>
+              </div>
+              <div>
+                <a href="/sign-up" className="px-3 py-2 rounded-lg hover:underline">
+                  SignUp
+                </a>
+              </div>
+
+              <div>
+                <a
+                  href="https://github.com/1-AkM-0/zoai-steam"
+                  target="_blank"
+                  className="px-3 py-2 rounded-lg text-indigo-400 hover:underline hover:text-indigo-600"
+                  rel='noopener noreferrer'
+                >
+
+                  Github
+                </a>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>)
