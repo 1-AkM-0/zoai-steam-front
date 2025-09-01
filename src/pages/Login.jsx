@@ -1,16 +1,16 @@
-import { useLocation } from "react-router-dom";
-import api, { setToken } from "../api/api";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 import { AuthForm } from "../components/AuthForm";
 export default function Login() {
+  const { login } = useContext(AuthContext)
   const location = useLocation()
+  const navigate = useNavigate()
   const initialValues = location.state
   const handleLogin = async ({ username, password }) => {
     try {
-      const response = await api.post(
-        '/auth/login', { username, password }
-      )
-      setToken(response.data.accessToken)
-      window.location.href = '/'
+      await login(username, password)
+      navigate('/')
     }
     catch (err) {
       console.log(err)

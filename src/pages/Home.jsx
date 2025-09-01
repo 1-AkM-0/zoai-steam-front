@@ -1,9 +1,8 @@
-import { useState } from "react";
-import api, { getToken, setToken } from "../api/api";
+import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import authServices from "../api/auth";
-
+import { AuthContext } from "../context/AuthContext";
 export default function Home() {
+  const { refreshTokens, getAccessToken, authRequest } = useContext(AuthContext)
   const [profileUrl, setProfileUrl] = useState("");
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,16 +16,14 @@ export default function Home() {
     e.preventDefault();
     if (!profileUrl) return;
     setLoading(true);
-    if (getToken()) {
-      if (isExpiring(getToken())) {
-        const accessToken = await authServices.refresh()
-        setToken(accessToken)
+    if (getAccessToken()) {
+      if (isExpiring(getAccessToken())) {
+        await refreshTokens()
       }
     }
     try {
-      const res = await api.post("/jokes", {
-        profileUrl,
-      });
+      const res = await authRequest('/jokes', { profileUrl })
+
       setResponse(res.data);
       setLoading(false);
     } catch (e) {

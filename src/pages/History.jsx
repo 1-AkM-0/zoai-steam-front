@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react"
-import api from "../api/api"
 import { Trash2 } from "lucide-react"
+import { useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
 
 export default function History() {
+  const { authGetRequest } = useContext(AuthContext)
   const [history, setHistory] = useState([])
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await api.get('/jokes')
+        const response = await authGetRequest('/jokes')
         setHistory(response.data.jokes)
-        console.log(response.data)
       }
       catch (e) {
         console.log(e)
       }
     }
     fetchHistory()
-  }, [])
+  }, [authGetRequest])
   return (
     <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center">
       <div className="w-full max-w-lg flex flex-col gap-4">
