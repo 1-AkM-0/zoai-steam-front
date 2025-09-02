@@ -20,11 +20,11 @@ export default function History() {
     fetchHistory()
   }, [authGetRequest])
   return (
-    <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center">
-      <div className="w-full max-w-lg flex flex-col gap-4">
+    <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center p-4">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-4">
         <h2 className="text-xl font-bold mb-4">Histórico de respostas</h2>
         {history.length === 0 ? <p className="text-zinc-400">Nenhuma resposta ainda</p> : history.map((item, index) => (
-          <div key={index} className="bg-zinc-800 p-4 rounded-xl border border-zinc-700 shadow flex justify-between items-center hover:bg-zinc-700 transition-colors">
+          <div key={index} className="bg-zinc-800 p-4 rounded-xl border border-zinc-700 shadow flex justify-between items-start hover:bg-zinc-700 transition-colors">
             <span className="text-sm text-zinc-200 max-w-[85%] leading-snug">
               {typeof item === "string" ? item : JSON.stringify(item.content)}
             </span>
