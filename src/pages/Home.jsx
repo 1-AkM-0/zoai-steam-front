@@ -47,13 +47,14 @@ export default function Home() {
           />
           <button
             type="submit"
+            disabled={loading}
             className="bg-indigo-500 hover:bg-indigo-600 py-3 rounded-lg font-bold"
           >
             {loading ? "Processando..." : "Zuar Perfil"}
           </button>
         </form>
         <div className="mt-6 w-full max-w-md">
-          <div className="bg-zinc-800 rounderd-lg p-6 border border-zinc-700 shadow-lg min-h-[100px] flex items-center justify-center">
+          <div className="bg-zinc-800 rounderd-lg p-6 border border-zinc-700 shadow-lg min-h-[100px] flex items-center justify-center text-center">
             {loading ? (
               <p>A resposta aparecerá aqui</p>
             ) : response ? (

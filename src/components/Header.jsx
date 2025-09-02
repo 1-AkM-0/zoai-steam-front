@@ -10,30 +10,30 @@ export function Header() {
   return (
     <div>
 
-      <div className="bg-zinc-900 flex items-center justify-between p-6 text-white ">
-        <div className=" px-3 py-2 rounded-lg">
-          <a href="/" className="text-2xl font-bold mb-6">
+      <div className="bg-zinc-900 flex flex-col sm:flex-row items-center justify-between p-4 sm:p-6 text-white ">
+        <div className=" mb-4 sm:mb-0">
+          <a href="/" className="text-2xl font-bold">
             ZoAI Steam 🎮
           </a>
         </div>
-        <div className="flex justify-around gap-10 items-center">
+        <div className="flex flex-wrap justify-center sm:justify-end gap-4 items-center">
           {accessToken ? (
             <>
               <div>
-                <a href="/history" className="px-3 py-2 rounded-lg hover:underline">
+                <a href="/history" className="px-3 py-2  hover:underline text-sm sm:text-base">
                   History
                 </a>
               </div>
 
               <div>
-                <button onClick={handleLogout} className="px-3 py-2 rounded-lg hover:underline">
+                <button onClick={handleLogout} className="px-3 py-2  hover:underline text-sm sm:text-base">
                   Logout
                 </button>
               </div>
               <div>
                 <a
                   href="https://github.com/1-AkM-0/zoai-steam"
-                  className="px-3 py-2 rounded-lg text-indigo-400 hover:underline hover:text-indigo-600"
+                  className="px-3 py-2 text-indigo-400 hover:underline hover:text-indigo-600 text-sm sm:text-base"
                   target='_blank'
                   rel='noopener noreferrer'
                 >
