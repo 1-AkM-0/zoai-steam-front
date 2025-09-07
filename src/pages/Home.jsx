@@ -1,11 +1,15 @@
+import { TriangleAlert } from "lucide-react";
 import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../context/AuthContext";
+
 export default function Home() {
   const { refreshTokens, getAccessToken, authRequest } = useContext(AuthContext)
   const [profileUrl, setProfileUrl] = useState("");
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null)
+
   const isExpiring = (token) => {
     const decode = jwtDecode(token)
     const now = Date.now() / 1000
@@ -14,9 +18,17 @@ export default function Home() {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-    if (!profileUrl) return;
+
+    if (!profileUrl) {
+      setError("Por favor, cole a URL do perfil da Steam.")
+      return
+    }
     setLoading(true);
+    setError(null)
+
+
     if (getAccessToken()) {
+
       if (isExpiring(getAccessToken())) {
         await refreshTokens()
       }
@@ -26,8 +38,12 @@ export default function Home() {
 
       setResponse(res.data);
       setLoading(false);
-    } catch (e) {
-      console.log("Error", e);
+    } catch (err) {
+      console.log(("Error", err.response))
+      setError(err.response?.data?.error || "Erro inesperado")
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -53,7 +69,16 @@ export default function Home() {
             {loading ? "Processando..." : "Zuar Perfil"}
           </button>
         </form>
+
         <div className="mt-6 w-full max-w-md">
+          {error && (
+            <div className="bg-red-900 text-red-300 p-4 rounded-lg mb-4 flex items-center gap-2">
+              <TriangleAlert />
+              <span>
+                {error}
+              </span>
+            </div>
+          )}
           <div className="bg-zinc-800 rounderd-lg p-6 border border-zinc-700 shadow-lg min-h-[100px] flex items-center justify-center text-center">
             {loading ? (
               <p>A resposta aparecerá aqui</p>
