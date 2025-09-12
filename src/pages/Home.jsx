@@ -2,48 +2,46 @@ import { TriangleAlert } from "lucide-react";
 import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../context/AuthContext";
+import ErrorCard from "../components/ErrorCard";
 
 export default function Home() {
-  const { refreshTokens, getAccessToken, authRequest } = useContext(AuthContext)
+  const { refreshTokens, getAccessToken, authRequest } =
+    useContext(AuthContext);
   const [profileUrl, setProfileUrl] = useState("");
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
 
   const isExpiring = (token) => {
-    const decode = jwtDecode(token)
-    const now = Date.now() / 1000
-    return decode.exp - now < 60
-  }
+    const decode = jwtDecode(token);
+    const now = Date.now() / 1000;
+    return decode.exp - now < 60;
+  };
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     if (!profileUrl) {
-      setError("Por favor, cole a URL do perfil da Steam.")
-      return
+      setError("Por favor, cole a URL do perfil da Steam.");
+      return;
     }
     setLoading(true);
-    setError(null)
-
+    setError(null);
 
     if (getAccessToken()) {
-
       if (isExpiring(getAccessToken())) {
-        await refreshTokens()
+        await refreshTokens();
       }
     }
     try {
-      const res = await authRequest('/jokes', { profileUrl })
+      const res = await authRequest("/jokes", { profileUrl });
 
       setResponse(res.data);
       setLoading(false);
     } catch (err) {
-      console.log(("Error", err.response))
-      setError(err.response?.data?.error || "Erro inesperado")
-    }
-    finally {
-      setLoading(false)
+      console.log(("Error", err.response));
+      setError(err.response?.data?.error || "Erro inesperado");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,14 +69,7 @@ export default function Home() {
         </form>
 
         <div className="mt-6 w-full max-w-md">
-          {error && (
-            <div className="bg-red-900 text-red-300 p-4 rounded-lg mb-4 flex items-center gap-2">
-              <TriangleAlert />
-              <span>
-                {error}
-              </span>
-            </div>
-          )}
+          {error && <ErrorCard error={error} />}
           <div className="bg-zinc-800 rounderd-lg p-6 border border-zinc-700 shadow-lg min-h-[100px] flex items-center justify-center text-center">
             {loading ? (
               <p>A resposta aparecerá aqui</p>
