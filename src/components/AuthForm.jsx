@@ -1,20 +1,27 @@
 import { useState } from "react";
+import ErrorCard from "./ErrorCard";
 
-export function AuthForm({ title, buttonText, onSubmit, initialValues }) {
+export function AuthForm({
+  title,
+  buttonText,
+  onSubmit,
+  initialValues,
+  error,
+}) {
   const [username, setUsername] = useState(initialValues?.username || "");
-  const [password, setPassword] = useState(initialValues?.password || "")
+  const [password, setPassword] = useState(initialValues?.password || "");
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    onSubmit({ username, password })
-  }
+    e.preventDefault();
+    onSubmit({ username, password });
+  };
 
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center p-6 text-white ">
       <div className="border-b-amber-800 mb-4 text-2xl">
-
         <h1>{title}</h1>
       </div>
+      {error && <ErrorCard error={error} />}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-md"
@@ -28,12 +35,10 @@ export function AuthForm({ title, buttonText, onSubmit, initialValues }) {
           className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-zinc-400 text-white w-full:"
         />
         <input
-
-          type='password'
+          type="password"
           placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-
           className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-zinc-400 text-white w-full:"
         />
         <button
@@ -43,8 +48,6 @@ export function AuthForm({ title, buttonText, onSubmit, initialValues }) {
           {buttonText}
         </button>
       </form>
-
     </div>
-
-  )
+  );
 }
