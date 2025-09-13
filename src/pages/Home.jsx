@@ -1,6 +1,5 @@
 import { TriangleAlert } from "lucide-react";
 import { useContext, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../context/AuthContext";
 import ErrorCard from "../components/ErrorCard";
 
@@ -12,11 +11,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const isExpiring = (token) => {
-    const decode = jwtDecode(token);
-    const now = Date.now() / 1000;
-    return decode.exp - now < 60;
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -27,11 +21,6 @@ export default function Home() {
     setLoading(true);
     setError(null);
 
-    if (getAccessToken()) {
-      if (isExpiring(getAccessToken())) {
-        await refreshTokens();
-      }
-    }
     try {
       const res = await authRequest("/jokes", { profileUrl });
 

@@ -1,7 +1,6 @@
 import { TriangleAlert } from "lucide-react";
 
 export default function ErrorCard({ error }) {
-  console.log(error);
   return (
     <div className="bg-red-900 text-red-300 p-4 rounded-lg mb-4 flex items-center gap-2">
       <TriangleAlert />
