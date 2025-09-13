@@ -1,3 +1,4 @@
+import ErrorCard from "../components/ErrorCard";
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useContext } from "react";
@@ -6,14 +7,15 @@ import { AuthContext } from "../context/AuthContext";
 export default function History() {
   const { authGetRequest, authDeleteJoke } = useContext(AuthContext);
   const [history, setHistory] = useState([]);
+  const [error, setError] = useState(null)
 
   const handleDelete = async (id) => {
-    console.log(id);
     try {
       await authDeleteJoke(id);
       setHistory(history.filter((item) => item.id !== id));
     } catch (error) {
       console.log(error);
+      setError(error.response?.data?.error)
     }
   };
 
@@ -54,6 +56,7 @@ export default function History() {
             </div>
           ))
         )}
+        {error && (<ErrorCard error={error} />)}
       </div>
     </div>
   );

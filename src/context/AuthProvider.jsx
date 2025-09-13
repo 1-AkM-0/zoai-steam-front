@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import api from "../api/api";
@@ -12,19 +13,30 @@ export function AuthProvider({ children }) {
   };
   const [accessToken, setAccessToken] = useState(getAccessToken());
 
-  useEffect(() => {
-    const refreshToken = getRefreshToken();
-    if (refreshToken && !accessToken) {
-      refreshTokens(refreshToken);
-    }
-  }, []);
+  const isExpiring = (token) => {
+    const decode = jwtDecode(token);
+    const now = Date.now() / 1000;
+    return decode.exp - now < 60;
+  };
 
-  const refreshTokens = async (refreshToken) => {
+  const requestInterceptor = async (requestFn) => {
+    const token = getAccessToken();
+    const refreshToken = getRefreshToken();
+
+    if (refreshToken && isExpiring(token)) {
+      await refreshTokens();
+    }
+    return requestFn();
+  };
+
+  const refreshTokens = async () => {
+    const refreshToken = getRefreshToken();
     try {
       const res = await api.post("auth/refresh", { refreshToken });
       setAccessToken(res.data.accessToken);
+      localStorage.setItem("accessToken", res.data.accessToken);
     } catch (e) {
-      logout();
+      await logout();
     }
   };
 
@@ -33,7 +45,6 @@ export function AuthProvider({ children }) {
     setAccessToken(res.data.accessToken);
     localStorage.setItem("accessToken", res.data.accessToken);
     localStorage.setItem("refreshToken", res.data.refreshToken);
-    console.log(accessToken);
   };
 
   const logout = async () => {
@@ -50,27 +61,33 @@ export function AuthProvider({ children }) {
   };
 
   const authRequest = async (url, data) => {
-    return api.post(url, data, {
-      headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
-      },
-    });
+    return requestInterceptor(() =>
+      api.post(url, data, {
+        headers: {
+          Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+        },
+      })
+    );
   };
 
   const authGetRequest = async (url) => {
-    return api.get(url, {
-      headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
-      },
-    });
+    return requestInterceptor(() =>
+      api.get(url, {
+        headers: {
+          Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+        },
+      })
+    );
   };
 
   const authDeleteJoke = async (id) => {
-    return api.delete(`/jokes/${id}`, {
-      headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
-      },
-    });
+    return requestInterceptor(() =>
+      api.delete(`/jokes/${id}`, {
+        headers: {
+          Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+        },
+      })
+    );
   };
 
   return (
